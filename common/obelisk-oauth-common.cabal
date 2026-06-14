@@ -35,7 +35,7 @@ library
     categories,
     containers >=0.5,
     mtl >=2,
-    obelisk-route,
+    jenga-route,
     text >= 1.2
   default-language: Haskell2010
   ghc-options: -Wall

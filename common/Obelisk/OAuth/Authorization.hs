@@ -33,8 +33,8 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
 
-import Obelisk.Route
-import Obelisk.Route.TH
+import Jenga.Route
+import Jenga.Route.TH
 
 -- | The desired response type indicates to the authorization server what type of
 -- authorization grant the client application is requesting.

@@ -12,7 +12,7 @@ import Network.HTTP.Client (Request(..), parseRequest)
 import Network.HTTP.Client.MultipartFormData (partBS, formDataBody)
 
 import Obelisk.OAuth.Authorization
-import Obelisk.Route
+import Jenga.Route
 
 data TokenGrant = TokenGrant_AuthorizationCode ByteString
                 | TokenGrant_RefreshToken ByteString
