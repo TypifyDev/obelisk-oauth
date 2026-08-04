@@ -35,6 +35,11 @@ import GHC.Generics (Generic)
 
 import Jenga.Route
 import Jenga.Route.TH
+import Data.GADT.Show.TH (deriveGShow)
+import Data.GADT.Compare.TH (deriveGEq, deriveGCompare)
+import Data.Constraint.Extras.TH (deriveArgDict)
+import Data.Universe.Some (UniverseSome(..))
+import Data.Some (Some(Some))
 
 -- | The desired response type indicates to the authorization server what type of
 -- authorization grant the client application is requesting.
@@ -143,6 +148,8 @@ redirectUriParamsEncoder = first (unitEncoder []) . coidl . redirectUriParamsEnc
 data OAuth :: * -> * where
   OAuth_RedirectUri :: OAuth (Maybe RedirectUriParams)
 
+$(concat <$> traverse ($ ''OAuth) [deriveGShow, deriveGEq, deriveGCompare, deriveArgDict])
+
 -- | The 'Encoder' of the 'OAuth' route. This should be used by the client app's backend
 -- route encoder.
 oauthRouteEncoder
@@ -151,4 +158,6 @@ oauthRouteEncoder
 oauthRouteEncoder = pathComponentEncoder $ \case
   OAuth_RedirectUri -> PathSegment "redirect" redirectUriParamsEncoder
 
-deriveRouteComponent ''OAuth
+
+instance UniverseSome OAuth where
+  universeSome = [Some OAuth_RedirectUri]
