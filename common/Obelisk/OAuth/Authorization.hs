@@ -27,6 +27,7 @@ import Control.Category ((.))
 import Control.Category.Monoidal (coidl)
 import Control.Monad.Error.Class (MonadError)
 import Data.Functor.Identity (Identity(..))
+import Data.Kind (Type)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Text (Text)
@@ -34,7 +35,6 @@ import qualified Data.Text as T
 import GHC.Generics (Generic)
 
 import Jenga.Route
-import Jenga.Route.TH
 import Data.GADT.Show.TH (deriveGShow)
 import Data.GADT.Compare.TH (deriveGEq, deriveGCompare)
 import Data.Constraint.Extras.TH (deriveArgDict)
@@ -96,7 +96,7 @@ authorizationRequestParams route enc ar = encode (queryParametersTextEncoder @Id
     , case _authorizationRequest_redirectUri ar of
         Nothing -> Map.empty
         Just r -> Map.singleton "redirect_uri" $
-          route <> renderBackendRoute enc (r $ OAuth_RedirectUri :/ Nothing)
+          route <> renderObeliskBackendRoute enc (r $ OAuth_RedirectUri :/ Nothing)
     , case _authorizationRequest_scope ar of
         [] -> Map.empty
         xs -> Map.singleton "scope" $ T.intercalate " " xs
@@ -145,7 +145,7 @@ redirectUriParamsEncoder = first (unitEncoder []) . coidl . redirectUriParamsEnc
 
 -- | The OAuth routes necessary for authorization code grants. This should be made a sub-route
 -- of the client application.
-data OAuth :: * -> * where
+data OAuth :: Type -> Type where
   OAuth_RedirectUri :: OAuth (Maybe RedirectUriParams)
 
 $(concat <$> traverse ($ ''OAuth) [deriveGShow, deriveGEq, deriveGCompare, deriveArgDict])

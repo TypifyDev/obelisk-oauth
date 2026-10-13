@@ -14,7 +14,6 @@ library
                , obelisk-generated-static
                , obelisk-oauth-common
                , obelisk-route
-               , reflex-dom-core
                , text
   exposed-modules:
     Frontend
@@ -27,7 +26,6 @@ executable frontend
                , common
                , obelisk-frontend
                , obelisk-route
-               , reflex-dom
                , obelisk-generated-static
                , frontend
   --TODO: Make these ghc-options optional
